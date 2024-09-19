@@ -6,4 +6,7 @@ git config --global user.name "Dan1aR"
 sudo apt-get install -y \
     gdb \
     gcc \
-    g++
+    g++ \
+    make \
+    clang \
+    clang-format
