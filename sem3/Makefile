@@ -3,7 +3,7 @@
 	lint \
 	all
 
-BUILD_PATHS = 4.c
+BUILD_PATHS = 3.c
 
 all: lint build
 
