@@ -6,7 +6,7 @@ size_t binary_polindrom_check(uint32_t n)
     for (int i = 0; i < 16; ++i) {
         uint32_t mask_right = 1 << i;
         uint32_t mask_left = 1 << (31 - i);
-        if (((n & mask_right) >> i) != ((n & mask_left) >> (31 - i))) {
+        if (((n & mask_right) > 0) != ((n & mask_left) > 0)) {
             return 0;
         }
     }

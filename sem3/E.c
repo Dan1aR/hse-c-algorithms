@@ -2,18 +2,19 @@
 
 int main()
 {
-    size_t n;
-    int __placeholder = scanf("%ld", &n);
-    __placeholder++;
+    size_t n, capacity;
+    if (!scanf("%ld %ld", &n, &capacity)) {
+        return 1;
+    }
 
-    size_t capacity;
-    __placeholder = scanf("%ld", &capacity);
     size_t cur_capacity = capacity;
     size_t num_steps = 0;
 
     for (size_t i = 0; i < n; ++i) {
         size_t plant;
-        __placeholder = scanf("%ld", &plant);
+        if (!scanf("%ld", &plant)) {
+            return 1;
+        }
 
         // printf("plant: %ld\n", plant);
         if (plant <= cur_capacity) {

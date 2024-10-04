@@ -4,15 +4,17 @@
 int main()
 {
     size_t n;
-    int __placeholder = scanf("%ld", &n);
-    __placeholder++;
+    if (!scanf("%ld", &n)) {
+        return 1;
+    }
 
     int min_price = INT_MAX;
     int max_profit = 0;
     for (size_t i = 0; i < n; ++i) {
         int price;
-        __placeholder = scanf("%d", &price);
-        __placeholder++;
+        if (!scanf("%d", &price)) {
+            return 1;
+        }
         if (price < min_price) {
             min_price = price;
         } else if ((price - min_price) > max_profit) {

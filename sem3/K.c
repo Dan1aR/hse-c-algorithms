@@ -1,14 +1,13 @@
 #include <stdio.h>
 
-size_t tail_rec()
+void tail_rec()
 {
     char ch = getchar();
     if (ch == '\n') {
-        return 0;
+        return;
     }
     tail_rec();
     printf("%c", ch);
-    return 0;
 }
 
 int main()

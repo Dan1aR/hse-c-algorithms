@@ -3,7 +3,7 @@
 void print_level(size_t n, size_t bits_max)
 {
     for (int i = bits_max - 1; i >= 0; --i) {
-        unsigned long mask = 1UL << i;
+        size_t mask = 1UL << i;
         printf("%c", (n & mask) ? '*' : '.');
     }
     printf("\n");

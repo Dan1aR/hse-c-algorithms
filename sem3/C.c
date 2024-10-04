@@ -50,8 +50,9 @@ int push_min(int* min1, int* min2, int* min3, int a)
 int main()
 {
     size_t n;
-    int __a = scanf("%ld", &n);
-    __a++;
+    if (!scanf("%ld", &n)) {
+        return 1;
+    }
     int max1 = INT_MIN;
     int max2 = INT_MIN;
     int max3 = INT_MIN;
@@ -61,8 +62,9 @@ int main()
 
     for (size_t i = 0; i < n; ++i) {
         int a;
-        int __b = scanf("%d", &a);
-        __b++;
+        if (!scanf("%d", &a)) {
+            return 1;
+        }
         push_max(&max1, &max2, &max3, a);
         push_min(&min1, &min2, &min3, a);
     }

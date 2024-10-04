@@ -3,7 +3,9 @@
 int main()
 {
     size_t num_bottles, num_exchange;
-    scanf("%ld %ld", &num_bottles, &num_exchange);
+    if (!scanf("%ld %ld", &num_bottles, &num_exchange)) {
+        return 1;
+    }
     size_t total = num_bottles;
 
     while (num_bottles >= num_exchange) {

@@ -1,26 +1,28 @@
 #include <stdio.h>
 
-int main()
+size_t get_dop(size_t n)
 {
-    size_t n;
-    scanf("%lu", &n);
     if (n == 0) {
-        printf("1");
-        return 0;
+        return 1;
     }
-
     size_t copied_n = n;
     size_t bit_mask = 1;
-    while (copied_n) {
+    while (copied_n > 1) {
         copied_n >>= 1;
         bit_mask <<= 1;
         bit_mask++;
     }
-    bit_mask >>= 1;
+    n = (~n) & bit_mask;
+    return n;
+}
 
-    size_t full_64bit = 0xFFFFFFFFFFFFFFFF;
-    n = (full_64bit - n) & bit_mask;
-    printf("%lu", n);
+int main()
+{
+    size_t n;
+    if (!scanf("%lu", &n)) {
+        return 1;
+    }
+    printf("%lu", get_dop(n));
 
     return 0;
 }
