@@ -1,27 +1,35 @@
 #include <stdio.h>
 
-int cycle_move(int arr[], int new_arr[], size_t offset, size_t n)
+int cycle_move(int arr[], int new_arr[], int offset, int n)
 {
-    for (size_t i = 0; i < n; ++i) {
-        new_arr[(i + offset) % n] = arr[i];
+    for (int i = 0; i < n; ++i) {
+        int new_idx = (i - offset) % n;
+        while (new_idx < 0) {
+            new_idx += n;
+        }
+
+        new_arr[new_idx] = arr[i];
     }
     return 0;
 }
 
 int main()
 {
-    size_t n;
-    size_t offset;
-    scanf("%ld", &n);
-    scanf("%ld", &offset);
+    int n;
+    int offset;
+    if (!scanf("%d %d", &n, &offset)) {
+        return 1;
+    }
 
     int arr[100];
     int new_arr[100];
-    for (size_t i = 0; i < n; ++i) {
-        scanf("%d", &arr[i]);
+    for (int i = 0; i < n; ++i) {
+        if (!scanf("%d", &arr[i])) {
+            return 1;
+        }
     }
     cycle_move(arr, new_arr, offset, n);
-    for (size_t i = 0; i < n; ++i) {
+    for (int i = 0; i < n; ++i) {
         printf("%d ", new_arr[i]);
     }
 

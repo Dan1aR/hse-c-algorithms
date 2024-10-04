@@ -14,11 +14,15 @@ int reverse(int arr[], size_t n)
 int main()
 {
     size_t n;
-    scanf("%ld", &n);
+    if (!scanf("%ld", &n)) {
+        return 1;
+    }
 
     int arr[100];
     for (size_t i = 0; i < n; ++i) {
-        scanf("%d", &arr[i]);
+        if (!scanf("%d", &arr[i])) {
+            return 1;
+        }
     }
     reverse(arr, n);
     for (size_t i = 0; i < n; ++i) {
