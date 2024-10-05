@@ -3,7 +3,7 @@
 	lint \
 	all
 
-BUILD_PATHS = N.c
+BUILD_PATHS = L.c
 
 all: lint build
 
