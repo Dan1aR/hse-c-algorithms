@@ -11,10 +11,21 @@ FILE *file_calloc(const char *file_path, size_t file_size) {
         printf("Can't open file %s: %s", file_path, strerror(errno));
         return NULL;
     }
-
+    char *zero = (char*)calloc(BUFF_SIZE, sizeof(char));
+    for (size_t i = 0; i < FILE_SIZE / BUFF_SIZE; ++i) {
+        if (fwrite(zero, sizeof(char), BUFF_SIZE, file) != BUFF_SIZE) {
+            printf("Can't write into file %s: %s", file_path, strerror(errno));
+            return NULL;
+        }
+    }
+    rewind(file);
+    return file;
 }
 
 int main() {
-
+    FILE *file = file_calloc("1.bin", FILE_SIZE);
+    if (file == NULL) {
+        return -1;
+    }
     return 0;
 }
