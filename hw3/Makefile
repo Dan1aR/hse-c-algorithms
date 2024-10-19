@@ -3,7 +3,7 @@
 	lint \
 	all
 
-BUILD_PATHS = cool_memmove.c
+BUILD_PATHS = B.c
 
 all: lint build
 
