@@ -9,7 +9,7 @@
 
 FILE* file_calloc(const char* file_path, size_t file_size)
 {
-    FILE* file = fopen(file_path, "wb");
+    FILE* file = fopen(file_path, "w+b");
     if (file == NULL) {
         printf("Can't open file %s: %s", file_path, strerror(errno));
         return NULL;
@@ -65,16 +65,67 @@ size_t get_ip_num(const char* ip)
     return ip_num;
 }
 
+int file_ip_write(size_t ip, FILE* file)
+{
+    size_t byte_index = ip / 8;
+    size_t bit_pos = ip % 8;
+    if (fseek(file, byte_index, SEEK_SET) != 0) {
+        printf("Error seeking in file: %s", strerror(errno));
+        fclose(file);
+        return -1;
+    }
+    unsigned char byte_value;
+    if (fread(&byte_value, 1, 1, file) != 1) {
+        printf("Error reading byte: %s", strerror(errno));
+        fclose(file);
+        return -1;
+    }
+    // set ip into byte
+    byte_value |= (1 << bit_pos);
+    // again seeking back
+    if (fseek(file, byte_index, SEEK_SET) != 0) {
+        printf("Error seeking in file: %s", strerror(errno));
+        fclose(file);
+        return -1;
+    }
+    if (fwrite(&byte_value, 1, 1, file) != 1) {
+        printf("Error writing byte into file: %s", strerror(errno));
+        fclose(file);
+        return -1;
+    }
+    return 0;
+}
+
+int file_ip_read(size_t ip, FILE* file)
+{
+    size_t byte_index = ip / 8;
+    size_t bit_pos = ip % 8;
+    if (fseek(file, byte_index, SEEK_SET) != 0) {
+        printf("Error seeking in file: %s", strerror(errno));
+        fclose(file);
+        return -1;
+    }
+    unsigned char byte_value;
+    if (fread(&byte_value, 1, 1, file) != 1) {
+        printf("Error reading byte: %s", strerror(errno));
+        fclose(file);
+        return -1;
+    }
+    return byte_value & (1 << bit_pos);
+}
+
 int main()
 {
     // going to preallocate filebuffer 512MB
-    FILE* file = file_calloc("1.bin", FILE_SIZE);
+    FILE* file = file_calloc("/tmp/1.bin", FILE_SIZE);
     if (file == NULL) {
         return -1;
     }
 
     size_t N;
-    scanf("%ld", &N);
+    if (scanf("%ld", &N) != 1) {
+        return -1;
+    }
 
     // allocate char buffer
     char ip_buff[IP_SIZE] = { 0 };
@@ -84,9 +135,26 @@ int main()
             return -1;
         }
         size_t ip_num = get_ip_num(ip_buff);
-        printf("%ld\n", ip_num);
-        printf("%s\n", ip_buff);
+        if (file_ip_write(ip_num, file) != 0) {
+            return -1;
+        }
     }
 
+    size_t M;
+    if (scanf("%ld", &M) != 1) {
+        return -1;
+    }
+    for (size_t i = 0; i < M; ++i) {
+        if (scanf("%s", ip_buff) != 1) {
+            return -1;
+        }
+        size_t ip_num = get_ip_num(ip_buff);
+        int read_code = file_ip_read(ip_num, file);
+        if (read_code == -1) {
+            return -1;
+        }
+        printf("%s\n", (read_code == 0) ? "no" : "yes");
+    }
+    fclose(file);
     return 0;
 }
