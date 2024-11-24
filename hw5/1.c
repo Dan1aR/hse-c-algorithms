@@ -77,6 +77,6 @@ int main()
             printf("%ld\n", _view_k(_res, k, N) + 1);
         }
     }
-
+    // O(N + MlogN), O(MlogN) if M ~ N, O(N) if M << N
     return 0;
 }
