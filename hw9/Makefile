@@ -1,6 +1,6 @@
 CC = gcc
 
-SRCS = 2.c
+SRCS = 4.c
 CFLAGS = -Wall -Wextra -Werror -I include
 
 OBJS = $(patsubst %.c, %.o, $(SRCS))

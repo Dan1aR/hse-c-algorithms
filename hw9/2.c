@@ -4,23 +4,16 @@
 
 double f(double x)
 {
-    if (x <= 0)
+    if (x == 0.0)
         return NAN;
-    return 4.0 * (1.0 + sqrt(x)) * log(x) - 1.0;
+    return sin(x) - 1.0 / x;
 }
 
-double simple_iter(double a, double b)
+double newton(double a, double b)
 {
-    if (b <= 0) {
-        return NAN;
-    }
-
-    double eps = 1e-14;
-    if (a <= 0)
-        a = 0 + eps;
-
     double fa = f(a);
     double fb = f(b);
+
     if (isnan(fa) || isnan(fb)) {
         return NAN;
     }
@@ -29,27 +22,30 @@ double simple_iter(double a, double b)
         return NAN;
     }
 
-    int max_iter = 100000;
-
     double x = (a + b) * 0.5;
-    for (int i = 0; i < max_iter; i++) {
-        if (x <= 0) {
-            x = (a + b) * 0.5;
-        }
-        double next_x = exp(1.0 / (4.0 * (1.0 + sqrt(x))));
-        if (fabs(next_x - x) < eps) {
-            x = next_x;
+    double eps = 1e-14;
+    int max_iter = 1000;
+    double lr = 1e-6;
+    int found = 0;
+
+    for (int iter = 0; iter < max_iter; iter++) {
+        double fx = f(x);
+        double fpx = (f(x + lr) - f(x - lr)) / (2.0 * lr);
+        double x_new = x - fx / fpx;
+        if (fabs(x_new - x) < eps) {
+            x = x_new;
+            found = 1;
             break;
         }
-        x = next_x;
+        x = x_new;
     }
 
-    if (x < a || x > b) {
+    if (!found) {
         return NAN;
     }
 
-    double fv = f(x);
-    if (fabs(fv) > 1e-6) {
+    double fx_final = f(x);
+    if (fabs(fx_final) > lr) {
         return NAN;
     }
 
@@ -63,7 +59,7 @@ int main()
         return 1;
     }
 
-    double res = simple_iter(a, b);
+    double res = newton(a, b);
     if (isnan(res)) {
         printf("no root\n");
     } else {
