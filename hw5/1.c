@@ -20,20 +20,40 @@ int _eps_comp(float a, float b, float eps)
 
 size_t calc_offset(float arr[], size_t n, float eps)
 {
-    size_t k = 0;
-    for (size_t i = k + 1; (i < n) && (_eps_comp(arr[k], arr[i], eps) <= 0); ++i) {
-        k = i;
+    size_t low = 0;
+    size_t high = n - 1;
+    while (low < high) {
+        size_t mid = (low + high) / 2;
+        int comp_mid_high = _eps_comp(arr[mid], arr[high], eps);
+        if (comp_mid_high == 1) {
+            low = mid + 1;
+        } else if (comp_mid_high == -1) {
+            high = mid;
+        } else {
+            high--;
+        }
     }
-    return (k + 1) % n;
+    return low;
 }
+
+// size_t calc_offset(float arr[], size_t n, float eps)
+// {
+//     size_t k = 0;
+//     for (size_t i = k + 1; (i < n) && (_eps_comp(arr[k], arr[i], eps) <= 0); ++i) {
+//         k = i;
+//     }
+//     return (k + 1) % n;
+// }
 
 size_t _view_k(size_t i, size_t k, size_t n)
 {
     return (i + k) % n;
 }
 
-int binarySearch(float arr[], size_t low, size_t high, float x, float eps, size_t k, size_t n, size_t* result_index)
+int binarySearch(float arr[], float x, float eps, size_t k, size_t n, size_t* result_index)
 {
+    size_t low = 0;
+    size_t high = n - 1;
     *result_index = n;
     while (low <= high) {
         size_t mid = low + (high - low) / 2;
@@ -86,6 +106,7 @@ int main()
         }
     }
     size_t k = calc_offset(arr, N, eps);
+    // printf("K = %zu\n\n", k);
     // Processing with bin search
     size_t M;
     if (scanf("%zu", &M) != 1) {
@@ -99,7 +120,7 @@ int main()
             return 1;
         }
         size_t _res;
-        int found = binarySearch(arr, 0, N - 1, x, eps, k, N, &_res);
+        int found = binarySearch(arr, x, eps, k, N, &_res);
         if (found) {
             size_t position = _res + 1;
             printf("%zu\n", position);
@@ -107,6 +128,6 @@ int main()
             printf("0\n");
         }
     }
-    // O(N + MlogN), O(MlogN) if M ~ N, O(N) if M << N
+    // O(logN + MlogN) => O(MlogN)
     return 0;
 }
