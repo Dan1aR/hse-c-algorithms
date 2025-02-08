@@ -1,0 +1,1 @@
+python3 main_test.py ./main.py ./tests/

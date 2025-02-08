@@ -1,0 +1,14 @@
+param = 123
+!bad_foo
+    ? 0 : param = 8 # Не исполняется
+    print(param)  # () => param == 0
+    ?! 0 : param = 3 # param - защищенная переменная  print!(456) # Не исполнится
+print!(param)
+bad_foo!()
+$$$
+
+
+
+123
+0
+RE

@@ -1,0 +1,16 @@
+!some_func
+    @ 0 : param; # То же, что pass -- возвращается 0
+!fib_loop
+    f1 = 1
+    f2 = 1
+    ?! param : *; # F(0) = 1
+    ?! param - 1 : *; # F(1) = 1
+    @ param - 2 : f3 = f1 + f2 ; f1 = f2 ; f2 = f3 ;
+print(some_func!())
+print(!fib_loop(4)) # Возвращается результат последней операции - f2=f3 
+$$$
+
+
+
+0
+3
