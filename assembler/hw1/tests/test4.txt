@@ -2,11 +2,11 @@
     ?! param : 1; *; # F(0) == 1 , "1" считается вычисленным выражением и возвращается из функции. Обратите внимание на "," в блоке
     ?! param - 1 : 1; *; # F(1) == 1
     fib_rec!(param - 1) + fib_rec!(param - 2) 
-fib_rec!(input!())
-fib_rec!(input!())
-fib_rec!(input!())
-fib_rec!(input!()) # Переполнение рекурсии (1001) 
-fib_rec!(6) # Уже не исполняется
+print!(fib_rec!(input!()))
+print!(fib_rec!(input!()))
+print!(fib_rec!(input!()))
+print!(fib_rec!(input!())) # Переполнение рекурсии (1001) 
+print!(fib_rec!(6)) # Уже не исполняется
 $$$
 0
 1

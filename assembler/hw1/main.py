@@ -9,6 +9,7 @@ from ast_interpreter import interpret_ast, ASTRuntimeError
 
 
 def main():
+    sys.setrecursionlimit(15000)
     # Чтение данных для input() из stdin
     input_data = sys.stdin.read()
     # print(input_data)
