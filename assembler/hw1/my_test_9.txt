@@ -1,0 +1,14 @@
+!bar
+    v = input!()
+    print!(v)
+    @ 1 : print!(i + param + v);
+    @ param + v : a = i;
+    print!(a)
+
+!foo
+    v = input!()
+    bar!()
+    print!(param)
+
+v = input!()
+foo!(v)
