@@ -19,7 +19,7 @@
 Смотрим `perf`; Например у меня есть какой-то запущенный: ./a.out с PID 123  
 `perf stat -p 123 sleep 15`  
 Он соберет счетчики которые говорят о производительноси  
-`perf stat -B -e cache-references.cache-misses -p 123 sleep 15`  
+`perf stat -B -e cache-references,cache-misses -p 123 sleep 15`  
 И тут будет % сколько мы мисаем в кеш и ходим в RAM  
 Вообще есть команда где он собирает сразу кучу счетчиков  
 
