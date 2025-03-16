@@ -4,9 +4,9 @@
 
 Первые результаты:
 ```
-#!TIMER indexing        57777.4
-#!TIMER loading 4506.75
-#!TIMER search  466.703
+#!TIMER indexing        41563.7
+#!TIMER loading 4757.99
+#!TIMER search  538.756
 ```
 
 Давай сначала посмотрим `time` как мы делали на семинаре для indexer
@@ -14,5 +14,6 @@
 Тут две части: первая - чтение, вторая - запись
 
 ### indexer
-- На записи заменили `std::endl` на "\n" - #!TIMER indexing        52618.3, чуть-чуть ускорили 
+- постоянное создание docwords
+- вставили const auto& везде где можно
 

@@ -20,6 +20,7 @@ void index()
     > invindex;
 
     std::string line;
+    std::unordered_map<std::string, std::size_t> docwords;
     while (true) {
         std::getline(std::cin, line);
         if (!std::cin || line.empty())
@@ -32,24 +33,24 @@ void index()
         urls_and_lens.back().second = splitted_text.size();
         avglen += splitted_text.size();
 
-        std::unordered_map<std::string, std::size_t> docwords;
-        for (auto w : splitted_text) {
+        docwords.clear();
+        for (const auto& w : splitted_text) {
             docwords[w] += 1;
         }
 
-        for (auto [w, _] : docwords) {
+        for (const auto& [w, _] : docwords) {
             invindex[w][parts[0]] = docwords[w];
         }
     }
 
     std::ofstream out(std::string(IndexName), std::ios_base::out);
     out << urls_and_lens.size() << " " << avglen / urls_and_lens.size() << "\n";
-    for (auto [url, len] : urls_and_lens)
+    for (const auto& [url, len] : urls_and_lens)
         out << url << " " << len << "\n";
 
-    for (auto [term, url_to_tf] : invindex) {
+    for (const auto& [term, url_to_tf] : invindex) {
         out << term;
-        for (auto [url, tf] : url_to_tf) {
+        for (const auto& [url, tf] : url_to_tf) {
             out << "\t" << url << ":" << tf;
         }
         out << "\n";

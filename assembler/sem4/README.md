@@ -25,7 +25,7 @@ danil.andreev    29337  98,8  0,4 411269872  68448 s016  R+    7:25     0:16.48 
 ```
 PID зафиксировали - 29337
 - Дальше записываем 
-`perf record --call-graph dwarf -p 6968 -F99 sleep 15`
+`perf record --call-graph dwarf -p 3452828 -F99 sleep 15`
 
 - И строим report
 `perf report`, нам показывает [img.png](./img/image.png)
