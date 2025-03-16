@@ -64,7 +64,7 @@ SearchResult search(std::string_view query, const Index& idx)
     auto terms = split(std::string(query), ' ');
 
     // Start with docs of the first term
-    std::set<std::string> final_urls;
+    std::unordered_set<std::string> final_urls;
     for (auto const& [url, _] : idx.invindex.at(terms[0])) {
         final_urls.insert(url);
     }
@@ -86,15 +86,14 @@ SearchResult search(std::string_view query, const Index& idx)
         }
     }
 
-
     if (final_urls.empty())
         return SearchResult();
 
 
     SearchResult result;
-    for (auto u : final_urls) {
+    for (const auto& u : final_urls) {
         double sum = 0;
-        for (auto w : terms) {
+        for (const auto& w : terms) {
             sum += idx.idfs.at(w) * (idx.invindex.at(w).at(u)*(K1 + 1) /
                                     (idx.invindex.at(w).at(u) + K1*(1 - b + b * idx.url2len.at(u) / idx.avglen)));
         }

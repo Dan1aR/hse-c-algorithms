@@ -5,6 +5,8 @@
 #include <string>
 #include <string_view>
 #include <vector>
+#include <unordered_set>
+
 
 constexpr std::string_view IndexName = "index.bin";
 

@@ -14,7 +14,7 @@ SEARCHER_INPUT="queries.500.for_50k.f.txt"
 # INDEXER_INPUT="db_2433.body.dump.processed.10k.gz"
 # SEARCHER_INPUT="queries.500.for_10k.f.txt"
 
-# zcat $INDEXER_INPUT | ./indexer
+zcat $INDEXER_INPUT | ./indexer
 cat $SEARCHER_INPUT | ./searcher > control.res
 
 diff $SEARCHER_INPUT.solution control.res

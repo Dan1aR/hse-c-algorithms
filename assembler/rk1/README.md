@@ -46,4 +46,17 @@ dan1ar@ist-k8s-master:~/hse-c-algorithms/assembler/rk1$ ./drun.sh
 #!TIMER search  563.678
 ```
 
-
+### searcher
+Убрали переиспользование set-ов:
+```
+#!TIMER indexing        12659.8
+#!TIMER loading 4849.65
+#!TIMER search  290.416
+```
+Почти х2, уже прикольно  
+Добавили unordered_set:
+```
+#!TIMER indexing        12803.4
+#!TIMER loading 4811.94
+#!TIMER search  203.146
+```
