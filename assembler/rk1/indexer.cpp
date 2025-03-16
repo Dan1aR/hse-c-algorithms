@@ -11,6 +11,9 @@
 
 void index()
 {
+    std::ios::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+
     double avglen = 0.;
     std::vector<std::pair<std::string, std::size_t>> urls_and_lens;
 
@@ -19,29 +22,65 @@ void index()
         std::unordered_map<std::string /* url */, std::size_t /* tf */>
     > invindex;
 
-    std::string line;
     std::unordered_map<std::string, std::size_t> docwords;
+    std::string url;
+    std::string doc;
+
     while (true) {
-        std::getline(std::cin, line);
-        if (!std::cin || line.empty())
-            break;
-
-        auto parts = split(line, '\t');
-        urls_and_lens.emplace_back(parts[0], 0);
-
-        auto splitted_text = split(parts[1], ' ');
-        urls_and_lens.back().second = splitted_text.size();
-        avglen += splitted_text.size();
-
-        docwords.clear();
-        for (const auto& w : splitted_text) {
-            docwords[w] += 1;
+        // 1) Read URL up to tab
+        if (!std::getline(std::cin, url, '\t')) {
+            break;  // no more data
+        }
+        
+        // 2) Read the rest of the line (the document text)
+        if (!std::getline(std::cin, doc)) {
+            break;  // should not happen unless input is malformed
         }
 
-        for (const auto& [w, _] : docwords) {
-            invindex[w][parts[0]] = docwords[w];
+        // Store URL in your vector
+        urls_and_lens.emplace_back(url, 0);
+
+        // 3) Clear & build docwords, and count tokens
+        docwords.clear();
+        std::size_t totalTokens = 0;
+
+        std::size_t start = 0;
+        const std::size_t sz = doc.size();
+        while (true) {
+            // Find the next space
+            std::size_t spacePos = doc.find(' ', start);
+            if (spacePos == std::string::npos) {
+                // Last token
+                if (start < sz) {
+                    // Create a string_view for the token
+                    std::string_view token(doc.data() + start, sz - start);
+                    // Insert into docwords by constructing a std::string from token
+                    ++docwords[std::string(token)];
+                    ++totalTokens;
+                }
+                break;
+            } else {
+                if (spacePos > start) {
+                    std::string_view token(doc.data() + start, spacePos - start);
+                    ++docwords[std::string(token)];
+                    ++totalTokens;
+                }
+                start = spacePos + 1;
+            }
+        }
+
+        // Update stats using totalTokens (all tokens) instead of unique tokens
+        urls_and_lens.back().second = totalTokens;
+        avglen += totalTokens;
+
+        // Update the inverted index
+        for (const auto& [word, freq] : docwords) {
+            invindex[word][url] = freq;
         }
     }
+
+
+
 
     std::ofstream out(std::string(IndexName), std::ios_base::out);
     out << urls_and_lens.size() << " " << avglen / urls_and_lens.size() << "\n";

@@ -63,20 +63,30 @@ SearchResult search(std::string_view query, const Index& idx)
 
     auto terms = split(std::string(query), ' ');
 
+    // Start with docs of the first term
     std::set<std::string> final_urls;
-    for (auto [url, _] : idx.invindex.at(terms[0]))
-        final_urls.emplace(url);
-
-    for (std::size_t i = 1; i < terms.size(); i++) {
-        std::set<std::string> tmp_set;
-        for (auto [url, _] : idx.invindex.at(terms[i]))
-            tmp_set.emplace(url);
-
-        std::set<std::string> intersect;
-        std::set_intersection(final_urls.begin(), final_urls.end(), tmp_set.begin(), tmp_set.end(),
-                              std::inserter(intersect, intersect.begin()));
-        final_urls = intersect;
+    for (auto const& [url, _] : idx.invindex.at(terms[0])) {
+        final_urls.insert(url);
     }
+
+    // For each subsequent term, remove docs that aren't in that term's posting list
+    for (std::size_t i = 1; i < terms.size(); i++) {
+        const auto& postings = idx.invindex.at(terms[i]); // an unordered_map
+        for (auto it = final_urls.begin(); it != final_urls.end(); ) {
+            // If this doc isn't in postings for the i-th term, remove it
+            if (postings.find(*it) == postings.end()) {
+                it = final_urls.erase(it);
+            } else {
+                ++it;
+            }
+        }
+        // Early stop if no docs remain
+        if (final_urls.empty()) {
+            break;
+        }
+    }
+
+
     if (final_urls.empty())
         return SearchResult();
 

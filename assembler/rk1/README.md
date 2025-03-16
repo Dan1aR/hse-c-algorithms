@@ -16,4 +16,34 @@
 ### indexer
 - постоянное создание docwords
 - вставили const auto& везде где можно
+- Убрали все split-ы
+```
+#!TIMER indexing        14156.3
+#!TIMER loading 4803.71
+#!TIMER search  544.441
+```
+15 секунд вместо 40, уже круто, увеличил размер файла в 5 раз, новые таймеры:
+```
+#!TIMER indexing        47280
+#!TIMER loading 4827.27
+#!TIMER search  550.219
+```
+
+Добавили:
+```cpp
+std::ios::sync_with_stdio(false);
+std::cin.tie(nullptr);
+```
+Стало побыстрее:
+```
+dan1ar@ist-k8s-master:~/hse-c-algorithms/assembler/rk1$ ./drun.sh 
+#!TIMER indexing        34487.6
+#!TIMER loading 4786.15
+#!TIMER search  553.367
+dan1ar@ist-k8s-master:~/hse-c-algorithms/assembler/rk1$ ./drun.sh 
+#!TIMER indexing        12468.6
+#!TIMER loading 4827.43
+#!TIMER search  563.678
+```
+
 
