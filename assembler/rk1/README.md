@@ -9,12 +9,17 @@
 #!TIMER search  538.756
 ```
 
-Давай сначала посмотрим `time` как мы делали на семинаре для indexer
+## Общий флоу
+я запускал либо `indexer` либо `searcher` (см. скрипт `./drun.sh`)  
+дальше по сути итеративно делал:
+```bash
+perf record --call-graph dwarf -p <PID> -F99 sleep 20
+```
 
-Тут две части: первая - чтение, вторая - запись
+
 
 ### indexer
-- постоянное создание docwords
+- постоянное создание docwords map-ы
 - вставили const auto& везде где можно
 - Убрали все split-ы
 ```
@@ -22,12 +27,7 @@
 #!TIMER loading 4803.71
 #!TIMER search  544.441
 ```
-15 секунд вместо 40, уже круто, увеличил размер файла в 5 раз, новые таймеры:
-```
-#!TIMER indexing        47280
-#!TIMER loading 4827.27
-#!TIMER search  550.219
-```
+15 секунд вместо 40, уже круто
 
 Добавили:
 ```cpp
@@ -36,12 +36,6 @@ std::cin.tie(nullptr);
 ```
 Стало побыстрее:
 ```
-# 50k
-dan1ar@ist-k8s-master:~/hse-c-algorithms/assembler/rk1$ ./drun.sh 
-#!TIMER indexing        34487.6
-#!TIMER loading 4786.15
-#!TIMER search  553.367
-
 # 10k
 dan1ar@ist-k8s-master:~/hse-c-algorithms/assembler/rk1$ ./drun.sh 
 #!TIMER indexing        12468.6
@@ -81,6 +75,8 @@ dan1ar@ist-k8s-master:~/hse-c-algorithms/assembler/rk1$ ./drun.sh
 #!TIMER search  103.097
 ```
 
+
+### Итого:
 Индексер: -68% (x3.15)
 loading: -40% (x1.66)
 search: -80% (x5.22)
