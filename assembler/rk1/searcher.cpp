@@ -28,7 +28,7 @@ struct Index
     // Document lengths stored by URL ID
     std::vector<std::size_t> doc_lengths;
     
-    // Inverted index using integer IDs
+    // Inverted index using integer IDs: term -> {url_id, tf}
     std::vector<std::unordered_map<int /* url_id */, std::size_t /* tf */>> invindex;
 };
 
@@ -76,7 +76,7 @@ void loadIndex(Index& loaded)
         loaded.doc_lengths[url_id] = len;
     }
 
-    inpFile.ignore();
+    inpFile.ignore(); // Ignore the newline after the last doc length entry
 
     while (true) {
         std::string line;
@@ -84,13 +84,36 @@ void loadIndex(Index& loaded)
         if (!inpFile || line.empty())
             break;
 
-        auto parts = split(line, '\t');
-        int term_id = getOrAddTermId(loaded, parts[0]);
-        
-        for (std::size_t i = 1; i < parts.size(); i++) {
-            auto url_tf = split(parts[i], ':');
-            int url_id = loaded.url_to_id[url_tf[0]]; // URL should already be in the map
-            loaded.invindex[term_id][url_id] = std::atoi(url_tf[1].c_str());
+        // Find the first tab that separates the term and its associated documents
+        size_t tab_pos = line.find('\t');
+        if (tab_pos == std::string::npos)
+            continue;  // Skip empty lines or malformed lines
+
+        // The first part is the term
+        std::string term = line.substr(0, tab_pos);
+        int term_id = getOrAddTermId(loaded, term);
+
+        // Now process each URL:TF pair, starting after the tab
+        size_t pos = tab_pos + 1;
+        while (pos < line.size()) {
+            size_t next_tab = line.find('\t', pos);
+            if (next_tab == std::string::npos) next_tab = line.size();
+
+            // Extract URL:TF part
+            std::string url_tf = line.substr(pos, next_tab - pos);
+
+            // Find the colon that separates the URL and term frequency
+            size_t colon_pos = url_tf.find(':');
+            if (colon_pos != std::string::npos) {
+                std::string url = url_tf.substr(0, colon_pos);
+                int tf = std::atoi(url_tf.substr(colon_pos + 1).c_str());
+
+                // Get URL id and store term frequency in the inverted index
+                int url_id = loaded.url_to_id[url];
+                loaded.invindex[term_id][url_id] = tf;
+            }
+
+            pos = next_tab + 1;  // Move past the tab
         }
     }
 
@@ -100,6 +123,7 @@ void loadIndex(Index& loaded)
         loaded.idfs[term_id] = std::log(((double) loaded.docscount) / loaded.invindex[term_id].size());
     }
 }
+
 
 using SearchResult = std::vector<std::pair<std::string, double>>;
 SearchResult search(std::string_view query, const Index& idx)

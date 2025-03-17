@@ -72,3 +72,15 @@ dan1ar@ist-k8s-master:~/hse-c-algorithms/assembler/rk1$ ./drun.sh
 #!TIMER search  101.805
 ```
 
+
+### Loader
+- Выкинули split-ы
+```
+#!TIMER indexing        13173.2
+#!TIMER loading 2856.53
+#!TIMER search  103.097
+```
+
+Индексер: -68% (x3.15)
+loading: -40% (x1.66)
+search: -80% (x5.22)
