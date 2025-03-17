@@ -36,10 +36,13 @@ std::cin.tie(nullptr);
 ```
 Стало побыстрее:
 ```
+# 50k
 dan1ar@ist-k8s-master:~/hse-c-algorithms/assembler/rk1$ ./drun.sh 
 #!TIMER indexing        34487.6
 #!TIMER loading 4786.15
 #!TIMER search  553.367
+
+# 10k
 dan1ar@ist-k8s-master:~/hse-c-algorithms/assembler/rk1$ ./drun.sh 
 #!TIMER indexing        12468.6
 #!TIMER loading 4827.43
@@ -60,3 +63,12 @@ dan1ar@ist-k8s-master:~/hse-c-algorithms/assembler/rk1$ ./drun.sh
 #!TIMER loading 4811.94
 #!TIMER search  203.146
 ```
+
+Перевели searcher на unorder_map с int для ключей, вместо string:
+```
+dan1ar@ist-k8s-master:~/hse-c-algorithms/assembler/rk1$ ./drun.sh 
+#!TIMER indexing        12651.4
+#!TIMER loading 4170.79
+#!TIMER search  101.805
+```
+
