@@ -6,6 +6,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include_directories(include)
 
+option(DEBUG_RECORD_VERBOSE "Verbose debug of records creatin" OFF)
+
 file(GLOB SOURCES "src/*.cpp")
 add_executable(kv_storage ${SOURCES})
 
